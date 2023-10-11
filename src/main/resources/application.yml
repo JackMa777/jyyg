@@ -1,0 +1,26 @@
+server:
+  port: 18898
+spring:
+  thymeleaf:
+    prefix:
+      classpath: /templates
+    cache: false
+userKey:
+  "73b8e00d56e3e670a1698f29e73e5a79"
+url:
+  "https://jyyg.wm.tobaccohb.com.cn/marketing-gold-leaf/sms/verification/code/smsSend.json"
+orderUrl:
+  "https://jyyg.wm.tobaccohb.com.cn/marketing-gold-leaf/api/goldLeafGo/goGetCanbuy/saveOrder.json"
+logging:
+  level:
+    org.springframework.web: debug
+  charset:
+    console: UTF-8
+    file: UTF-8
+  file:
+    name: log/fff.log
+  logback:
+    rolling policy:
+      max-file-size: 1MB
+      max-history: 30
+      file-name-pattern: log/%d{yyyy-MM}/ota.%d{yyyy-MM-dd}.%i.log

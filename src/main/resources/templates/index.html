@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+          integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css"
+          integrity="sha512-xX2rYBFJSj86W54Fyv1de80DWBq7zYLn2z0I9bIhQG+rxIF6XVJUpdGnsNHWRa6AvP89vtFupEPDP8eZAtu9qA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <title>JYYG</title>
+    <style>
+        * {
+    box-sizing: border-box;
+}
+
+body {
+    background: #f6f5f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    margin: -20px 0 50px;
+}
+
+h1 {
+    font-weight: bold;
+    margin: 0;
+}
+
+h2 {
+    text-align: center;
+}
+
+p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+}
+
+span {
+    font-size: 12px;
+}
+
+a {
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+}
+
+button {
+    border-radius: 20px;
+    border: 1px solid #ff4b2b;
+    background-color: #ff4b2b;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+}
+
+.button:active {
+    transform: scale(0.95);
+}
+
+.button:focus {
+    outline: none;
+}
+
+.button.ghost {
+    background-color: transparent;
+    border-color: #ffffff;
+}
+
+form {
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+}
+
+input {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+}
+select {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+}
+
+.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+}
+
+@keyframes show {
+    0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+
+    50%, 100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+}
+
+.overlay {
+    background: #ff4b2b;
+    background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
+    background: linear-gradient(to right, #ff4b2b, #ff416c);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 0;
+    color: #ffffff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
+
+.social-container {
+    margin: 20px 0;
+}
+
+.social-container a {
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    height: 40px;
+    width: 40px;
+}
+
+footer {
+    background-color: #222;
+    color: #fff;
+    font-size: 14px;
+    bottom: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 999;
+}
+
+footer p {
+    margin: 10px 0;
+
+}
+
+footer i {
+    color: red;
+}
+
+footer a {
+    color: #3c97bf;
+    text-decoration: none;
+}
+
+    </style>
+</head>
+<body>
+<h2 id="result">登录</h2>
+<div class="container" id="container">
+    <div class="form-container sign-in-container">
+        <form action="">
+            <div class="social-container">
+
+                <select type="storeNo" placeholder="storeNo" id="storeNo" >
+                    <option value="2037">金叶惠民黄陂店</option>
+                    <option value="2094">金叶惠民四明路店</option>
+                    <option value="103135">金叶阳光武商沌口店</option>
+                    <option value="103012">长港路专卖店</option>
+                    <option value="103075">泛海国际店</option>
+                    <option value="103006">七里庙专卖店</option>
+                    <option value="103008">万豪国际专卖店</option>
+                    <option value="103014">金色华府专卖店</option>
+                    <option value="103007">iamlab丝享馆</option>
+                    <option value="2052">金叶惠民台北路店</option>
+                    <option value="103138">K11航空路店</option>
+                    <option value="2046">金叶惠民青山店</option>
+                    <option value="103002">武商世贸专卖店</option>
+                    <option value="103010">荣西专卖店</option>
+                    <option value="103132">金叶阳光武商众圆店</option>
+                    <option value="103015">四唯路专卖店</option>
+                    <option value="103011">武胜路专卖店</option>
+                    <option value="103073">金地广场店</option>
+                    <option value="103069">金禾时尚店</option>
+                    <option value="103130">汉街专卖店</option>
+                    <option value="103018">宏城金都专卖店</option>
+                    <option value="103037">中南二路奥山店</option>
+                    <option value="2020">金叶惠民付家坡店</option>
+                    <option value="103003">武商亚贸专卖店</option>
+                    <option value="103016">理工大专卖店</option>
+                    <option value="103004">群光广场专卖店</option>
+                    <option value="103136">珞喻路店</option>
+                    <option value="103140">泛悦城店</option>
+                </select>
+                <select type="product" placeholder="product" id="product" >
+                    <option value="990383-2">长城庄园赤霞珠干红葡萄酒珍藏</option>
+                    <option value="990454-2">茅台赤霞珠干红葡萄酒（庄园R5)</option>
+                    <option value="801312-2">每日燕窝540克（108克*5）</option>
+                    <option value="801184-3">茅台大师尊藏干红葡萄酒</option>
+                    <option value="990194-2">映马云池蜜香红茶</option>
+                    <option value="990030-2">恩施玉露臻享绿茶</option>
+                    <option value="801324-2">长城云漠酒庄特级精选干红</option>
+                    <option value="801379-6">13%vol 蓝莓精酿遇见·丹红(半干型)</option>
+                    <option value="801405-4">奥希耶嘉园红葡萄酒干红</option>
+                    <option value="706601-10">52度五粮液1618</option>
+                    <option value="706606-10">52度第八代五粮液</option>
+                    <option value="707219-10">52度梦之蓝M3水晶版</option>
+                    <option value="706803-10">42度15年白云边</option>
+                    <option value="706802-10">42度20年白云边</option>
+                    <option value="800033-10">53度国窖1573酒2010版</option>
+                    <option value="801342-2">星斗山臻享红茶礼盒</option>
+                    <option value="706807-10">53度白云边1979</option>
+                    <option value="706806-10">45度白云边20年（普）</option>
+                    <option value="707409-10">53度青花郎500ml</option>
+                    <option value="707408-10">53度红花郎（15）500ml</option>
+                    <option value="706528-10">53%vol 500ml 茅台醇（1992）</option>
+                    <option value="801185-10">53度青花30汾酒</option>
+                    <option value="711805-10">53度青花20汾酒</option>
+                    <option value="801381-10">马爹利尚选XXO干邑白兰地</option>
+                    <option value="801298-10">马爹利蓝带干邑白兰地（有盒装）</option>
+                    <option value="707217-10">52度梦之蓝M6+</option>
+                    <option value="707222-10">52度天之蓝</option>
+                    <option value="707308-10">52度稻花香清样</option>
+                    <option value="707310-10">52度稻花香活力号</option>
+                    <option value="707312-10">52度稻花香活力星</option>
+                    <option value="801272-10">40度五粮浓香五粮醇红装</option>
+                    <option value="801273-10">40度五粮浓香五粮醇金装</option>
+                    <option value="801274-10">52度五粮浓香五粮特曲</option>
+                    <option value="801275-10">52度五粮浓香五粮特曲（精品）</option>
+                    <option value="801201-6">五粮液火爆（42度182）</option>
+                    <option value="801202-6">五粮液火爆（33度182）</option>
+                    <option value="990033-1">臻享茶叙礼盒（一红一绿）</option>
+                    <option value="801200-6">五粮液火爆（58度182）</option>
+                    <option value="708206-0">桑干梅鹿辄/赤霞珠干红2012</option>
+                    <option value="708205-0">桑干雷司令干白2015</option>
+                    <option value="708208-0">桑干西拉干红2012</option>
+                    <option value="800210-6">大名度</option>
+                    <option value="800001-6">100#烟芯</option>
+                    <option value="800723-6">铁盒名度MT-10</option>
+                    <option value="800306-6">弗朗兹过滤芯</option>
+                    <option value="800788-6">烟斗斗芯</option>
+                    <option value="800098-6">pm-5</option>
+                    <option value="800096-6">pm-10</option>
+                    <option value="800097-6">pm-30</option>
+                    <option value="800095-6">pc-110</option>
+                    <option value="800005-6">130烟嘴</option>
+                    <option value="800024-6">310烟嘴</option>
+                    <option value="800026-6">330烟嘴</option>
+                    <option value="800027-6">340烟嘴</option>
+                    <option value="800029-6">380烟嘴</option>
+                    <option value="800002-6">110-2烟嘴</option>
+                    <option value="800043-6">904-2烟嘴</option>
+                    <option value="800028-6">360烟咀</option>
+                    <option value="800044-6">910-2烟咀</option>
+                    <option value="800307-6">弗朗兹烟咀</option>
+                    <option value="706406-6">小爱嗨187ml</option>
+                </select>
+
+                <input type="text" placeholder="openid" id="openid"/>
+                <input type="text" placeholder="phone" id="phone"/>
+                <input type="text" placeholder="ticket" id="ticket"/>
+                <input type="text" placeholder="User-Agent(获取不到验证码时填入)" id="userAgent"/>
+                <div>
+                    <input type="text" placeholder="验证码" id="vcode" style="width:40%;float:none;text-align:left;">
+                    <img  alt="验证码" style="max-width:99%; max-height:1000px;" id="capture" >
+                </div>
+                <div>
+                    <button type="button" class="button" onclick="getCapture()"style="text-align:left;" value="验证码">验证码</button>
+                    <button type="button" class="button" onclick="save()" style="text-align:right;" value=" 提 交 "> 提 交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>你好，朋友！</h1>
+                <p>
+                    输入您的个人信息，与我们一起开始旅程
+                </p>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>你好，朋友！</h1>
+                <p>输入您的个人信息，与我们一起开始旅程</p>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <p>
+        Created with<i class="fa fa-heart"></i>by
+        <a href="https://user.qzone.qq.com/?source=panelstar" target="_blank"></a>
+    </p>
+</footer>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script src='https://cdn.bootcdn.net/ajax/libs/jsencrypt/3.2.1/jsencrypt.js'></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        document.getElementById("phone").value = localStorage.phone ==""?localStorage.phone:"";
+        document.getElementById("openid").value = localStorage.openid ==""?localStorage.openid:"";
+        document.getElementById("storeNo").value =localStorage.storeNo==""?localStorage.storeNo:"";
+        document.getElementById("product").value = localStorage.product==""?localStorage.product:"";
+        document.getElementById("ticket").value = localStorage.ticket==""?localStorage.ticket:"";
+        document.getElementById("userAgent").value = localStorage.userAgent==""?localStorage.userAgent:"";
+    });
+    // 加密
+    function encrypt(data) {
+        let encryptor = new JSEncrypt()
+        encryptor.setPublicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDZzq9vvStfcJojE0X+Vg+DfkgEI9SmB/awFYGtKdC7v67mvbQpSLscwZmG7TmiA6XeMRaX7PEc33R7hCd4zMwP0d2AUnpEivmMRFGHVE7+ATFWfOXlOcmN25Cqq3M3yDVAH07QN+0uVmsZ/61yIKUWLgjYn8O0SlmZGWXPDidBnQIDAQAB");
+        return encryptor.encrypt(data)
+    }
+    function getCloseConnect() {
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            contentType:"application/json",
+            url: '/JYYGSkill/getConnect',
+            data: JSON.stringify(json),
+            success: function (data) {
+                if (data != "") {
+                    if (data == true) {
+                        alert("连接、断开成功")
+                    }else{
+                        alert("连接、断开失败")
+                    }
+                }
+            }
+        });
+    }
+    function save() {
+        //alert('aaa')
+        var phone = document.getElementById("phone").value.replace(/[\r\n]/g, "");
+        var openId = document.getElementById("openid").value.replace(/[\r\n]/g, "");
+        var phoneEncrypt = encrypt(document.getElementById("phone").value.replace(/[\r\n]/g, ""));
+        var storeNo = document.getElementById("storeNo").value;
+        var product = document.getElementById("product").value;
+        var vcode = document.getElementById("vcode").value;
+        var ticket = document.getElementById("ticket").value.replace(/[\r\n]/g, "");
+        var userAgent = document.getElementById("userAgent").value.replace(/[\r\n]/g, "");
+        var json ={
+                "phone":phone,
+                "openid":openId.length >80?openId:encrypt(openId),
+                "phoneEncrypt":phoneEncrypt,
+                "storeNo":storeNo,
+                "product":product,
+                "vcode":vcode,
+                "ticket":ticket,
+                "userAgent":userAgent,
+            }
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            contentType:"application/json",
+            url: '/JYYGSkill/saveOrder2',
+            data: JSON.stringify(json),
+            success: function (data) {
+                if (data != "") {
+                    if (data.successed == true) {
+                        document.getElementById("result").html(data.msg)
+                        console.log("data----"+data.msg)
+                    }else if(data.StatusCode == "OK"){
+                        alert("预定成功")
+                    }
+                    else {
+                        alert(data.msg)
+                    }
+                }
+            }
+        });
+
+    }
+    function getCapture() {
+        var phone = document.getElementById("phone").value.replace(/[\r\n]/g, "");
+        var openId = document.getElementById("openid").value.replace(/[\r\n]/g, "");
+        var phoneEncrypt = encrypt(document.getElementById("phone").value.replace(/[\r\n]/g, ""));
+        var storeNo = document.getElementById("storeNo").value;
+        var ticket = document.getElementById("ticket").value.replace(/[\r\n]/g, "");
+        var userAgent = document.getElementById("userAgent").value;
+        var json ={
+                "ticket":ticket,
+                "phone":phone,
+                "userAgent":userAgent
+            }
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            contentType:"application/json",
+            url: '/JYYGSkill/getCapture2',
+            data: JSON.stringify(json),
+            success: function (data) {
+                if (data != "") {
+                    if (data.successed == true) {
+                        document.getElementById("capture").setAttribute("src", data.data);
+                        console.log("data----"+data)
+                    }else{
+                        alert("验证码获取失败："+data.msg)
+                    }
+
+                }
+            }
+        });
+        localStorage.phone = document.getElementById("phone").value;
+        localStorage.openid = document.getElementById("openid").value;
+        localStorage.storeNo = document.getElementById("storeNo").value;
+        localStorage.product = document.getElementById("product").value;
+        localStorage.ticket = document.getElementById("ticket").value;
+        localStorage.userAgent = document.getElementById("userAgent").value;
+
+    }
+</script>
+</body>
+</html>
