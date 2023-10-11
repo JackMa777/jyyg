@@ -34,23 +34,6 @@ public class SkillController {
         logger.info("com.example.util.SecKill.getConnect() result: {} jsonStr :{}",b,JSONUtil.toJsonStr(ao));
         return b;
     }
-    @PostMapping("saveOrder")
-    @ResponseBody
-    public JSONObject saveOrder(@RequestBody PageInfoAo ao) throws IOException {
-        HashMap<String, Object> map = new HashMap<String, Object>() {{
-            put("phone", ao.getPhone());
-            put("openid", ao.getOpenid());
-            put("storeNo", ao.getStoreNo());
-            put("ip", "unknown");
-            put("vcode", ao.getVcode());
-            put("product", ao.getProduct());
-            put("type", 1);
-        }};
-        String json = JSONUtil.toJsonStr(map);
-        JSONObject post = post(orderUrl, json, ao.getTicket(), ao.getUserAgent());
-        logger.info("com.example.util.SecKill.saveOrder() result: {} jsonStr :{}",post,json);
-        return post;
-    }
     @PostMapping("saveOrder2")
     @ResponseBody
     public JSONObject saveOrder2(@RequestBody PageInfoAo ao) throws IOException {
@@ -108,26 +91,6 @@ public class SkillController {
         return resultForJson;
     }
 
-    @PostMapping("getCapture")
-    @ResponseBody
-    public JSONObject getCapture(@RequestBody PageInfoAo ao) {
-        HashMap<String, Object> map = new HashMap<String, Object>() {{
-            put("phone", ao.getPhone());
-            put("type", 1);
-            put("lx-cors-request", true);
-        }};
-        String result = HttpRequest.get(url)
-                .header("User-Agent", StringUtils.hasText(ao.getUserAgent())?ao.getUserAgent():"Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.37(0x1800252d) NetType/WIFI Language/zh_CN")
-                .header("Referer", "https://servicewechat.com/wxc8b875c7375961bb/9/page-frame.html")
-                .header("content-type", "application/json")
-                .header("Accept-Encoding", "gzip,compress,br,deflate")
-                .header("lx-ticket", ao.getTicket())
-                .header("Connection", "keep-alive")
-                .header("Host", "jyyg.wm.tobaccohb.com.cn")
-                .form(map).execute().body();
-        logger.info("com.example.util.SecKill.getImageStr result: {}",result);
-        return JSONObject.parseObject(result);
-    }
     @PostMapping("getCapture2")
     @ResponseBody
     public JSONObject getCapture2(@RequestBody PageInfoAo ao) {
